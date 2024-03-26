@@ -49,30 +49,6 @@ pose_hand = [
     "PINKY_TIP",
 ]
 
-pose_hand_2 = [
-    "WRIST2",
-    "THUMB_CPC2",
-    "THUMB_MCP2",
-    "THUMB_IP2",
-    "THUMB_TIP2",
-    "INDEX_FINGER_MCP2",
-    "INDEX_FINGER_PIP2",
-    "INDEX_FINGER_DIP2",
-    "INDEX_FINGER_TIP2",
-    "MIDDLE_FINGER_MCP2",
-    "MIDDLE_FINGER_PIP2",
-    "MIDDLE_FINGER_DIP2",
-    "MIDDLE_FINGER_TIP2",
-    "RING_FINGER_PIP2",
-    "RING_FINGER_DIP2",
-    "RING_FINGER_TIP2",
-    "RING_FINGER_MCP2",
-    "PINKY_MCP2",
-    "PINKY_PIP2",
-    "PINKY_DIP2",
-    "PINKY_TIP2",
-]
-
 
 class Mediapipe_BodyModule:
     def __init__(self):
