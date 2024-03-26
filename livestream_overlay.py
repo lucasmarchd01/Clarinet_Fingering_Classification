@@ -22,6 +22,56 @@ HANDEDNESS_TEXT_COLOR = (88, 205, 54)  # vibrant green
 from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
 import numpy as np
+import csv
+
+
+pose_hand = [
+    "WRIST",
+    "THUMB_CPC",
+    "THUMB_MCP",
+    "THUMB_IP",
+    "THUMB_TIP",
+    "INDEX_FINGER_MCP",
+    "INDEX_FINGER_PIP",
+    "INDEX_FINGER_DIP",
+    "INDEX_FINGER_TIP",
+    "MIDDLE_FINGER_MCP",
+    "MIDDLE_FINGER_PIP",
+    "MIDDLE_FINGER_DIP",
+    "MIDDLE_FINGER_TIP",
+    "RING_FINGER_PIP",
+    "RING_FINGER_DIP",
+    "RING_FINGER_TIP",
+    "RING_FINGER_MCP",
+    "PINKY_MCP",
+    "PINKY_PIP",
+    "PINKY_DIP",
+    "PINKY_TIP",
+]
+
+pose_hand_2 = [
+    "WRIST2",
+    "THUMB_CPC2",
+    "THUMB_MCP2",
+    "THUMB_IP2",
+    "THUMB_TIP2",
+    "INDEX_FINGER_MCP2",
+    "INDEX_FINGER_PIP2",
+    "INDEX_FINGER_DIP2",
+    "INDEX_FINGER_TIP2",
+    "MIDDLE_FINGER_MCP2",
+    "MIDDLE_FINGER_PIP2",
+    "MIDDLE_FINGER_DIP2",
+    "MIDDLE_FINGER_TIP2",
+    "RING_FINGER_PIP2",
+    "RING_FINGER_DIP2",
+    "RING_FINGER_TIP2",
+    "RING_FINGER_MCP2",
+    "PINKY_MCP2",
+    "PINKY_PIP2",
+    "PINKY_DIP2",
+    "PINKY_TIP2",
+]
 
 
 class Mediapipe_BodyModule:
@@ -29,6 +79,7 @@ class Mediapipe_BodyModule:
         self.mp_drawing = solutions.drawing_utils
         self.mp_hands = solutions.hands
         self.results = None
+        self.all_data = {"Right": [], "Left": []}
 
     def draw_landmarks_on_image(self, rgb_image, detection_result):
         hand_landmarks_list = detection_result.hand_landmarks
@@ -58,12 +109,56 @@ class Mediapipe_BodyModule:
         return annotated_image
 
     # Create a hands landmarker instance with the live stream mode:
+
     def print_result(
         self, result: HandLandmarkerResult, output_image: mp.Image, timestamp_ms: int
     ):
-        # print('hands landmarker result: {}'.format(result))
+        print("hands landmarker result: {}".format(result))
         self.results = result
-        # print(type(result))
+
+        frame_data = {"Right": {}, "Left": {}}
+
+        # Iterate over each hand landmarks list
+        for i, hand_landmarks in enumerate(result.hand_landmarks):
+            handedness = "Right" if i == 0 else "Left"
+            for j, landmark in enumerate(hand_landmarks):
+                # Accessing landmarks for each hand
+                landmark_name = pose_hand[j]
+                x = landmark.x * output_image.width
+                y = landmark.y * output_image.height
+                z = landmark.z
+                frame_data[handedness][landmark_name] = {"x": x, "y": y, "z": z}
+
+        # Append frame data to the list
+        self.all_data["Right"].append(frame_data["Right"])
+        self.all_data["Left"].append(frame_data["Left"])
+
+    def save_to_csv(self, file_path):
+        with open(file_path, "w", newline="") as csvfile:
+            fieldnames = ["Frame", "Hand", "Landmark", "x", "y", "z"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+            writer.writeheader()
+
+            for frame_num, (right_data, left_data) in enumerate(
+                zip(self.all_data["Right"], self.all_data["Left"])
+            ):
+                # Check if frame_data is empty (no landmarks detected)
+                if not right_data and not left_data:
+                    continue  # Skip this frame
+
+                for handedness, data in [("Right", right_data), ("Left", left_data)]:
+                    for landmark, coordinates in data.items():
+                        writer.writerow(
+                            {
+                                "Frame": frame_num,
+                                "Hand": handedness,
+                                "Landmark": landmark,
+                                "x": coordinates["x"],
+                                "y": coordinates["y"],
+                                "z": coordinates["z"],
+                            }
+                        )
 
     def main(self):
         options = HandLandmarkerOptions(
@@ -106,6 +201,9 @@ class Mediapipe_BodyModule:
 
             video.release()
             cv2.destroyAllWindows()
+
+            # Save data to CSV after processing all frames
+            self.save_to_csv("hand_landmarks_data.csv")
 
 
 if __name__ == "__main__":
