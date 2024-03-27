@@ -45,6 +45,7 @@ pytz==2024.1
 pyzmq @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_c7mhasdker/croot/pyzmq_1705605099593/work
 scikit-learn==1.4.1.post1
 scipy==1.12.0
+seaborn==0.13.2
 six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
 stack-data @ file:///home/conda/feedstock_root/build_artifacts/stack_data_1669632077133/work
 threadpoolctl==3.4.0
