@@ -32,5 +32,5 @@ def process_csv_files(folder_path):
 folder_path = "landmark_data_stable"
 
 combined_data = process_csv_files(folder_path)
-combined_data.to_csv("combined_data_fitlered.csv", index=False)
+combined_data.to_csv("combined_data_filtered.csv", index=False)
 print("Combined data saved to 'combined_data_filtered.csv'")
