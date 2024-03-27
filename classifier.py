@@ -1,38 +1,81 @@
 import numpy as np
-import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
-from sklearn.cluster import KMeans
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix
+import pandas as pd
 
-# Step 1: Load the data
-data = pd.read_csv("combined_data_filtered.csv")
 
-# Step 2: Extract features and labels
-X = data.pivot(index="Frame", columns=["Hand", "Landmark"], values=["X", "Y", "Z"])
-X = X.to_numpy().reshape(len(X), -1)  # Flatten the data
-y = data["Fingering"].values
+# Assuming 'data' contains the input data
+df = pd.read_csv("data/combined/flattened_data.csv")
 
-# Step 3: Split data into train and test sets
+
+# Extract features and labels
+X = df.iloc[:, 1:-1].values  # Exclude the Unique_Frame and Fingering columns
+y = df.iloc[:, -1].values  # Fingering column
+
+# Normalize features
+scaler = StandardScaler()
+X_normalized = scaler.fit_transform(X)
+
+# Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X_normalized, y, test_size=0.2, random_state=42
 )
 
-# Step 4: Train Support Vector Machine (SVM) classifier
-svm_clf = SVC(kernel="linear")
-svm_clf.fit(X_train, y_train)
+# Train KNN classifier
+knn_classifier = KNeighborsClassifier(n_neighbors=5)
+knn_classifier.fit(X_train, y_train)
 
-# Step 5: Train KMeans clustering
-kmeans = KMeans(n_clusters=len(np.unique(y_train)))
-kmeans.fit(X_train)
+# Train SVM classifier
+svm_classifier = SVC(kernel="linear")
+svm_classifier.fit(X_train, y_train)
 
-# Step 6: Predictions
-svm_preds = svm_clf.predict(X_test)
-kmeans_preds = kmeans.predict(X_test)
+# Evaluate classifiers
+knn_accuracy = knn_classifier.score(X_test, y_test)
+svm_accuracy = svm_classifier.score(X_test, y_test)
 
-# Step 7: Evaluation (optional)
-svm_accuracy = accuracy_score(y_test, svm_preds)
-kmeans_accuracy = accuracy_score(y_test, kmeans_preds)
+knn_predictions = knn_classifier.predict(X_test)
+svm_predictions = svm_classifier.predict(X_test)
 
-print("SVM Accuracy:", svm_accuracy)
-print("KMeans Accuracy:", kmeans_accuracy)
+print("KNN Classifier Accuracy:", knn_accuracy)
+print("SVM Classifier Accuracy:", svm_accuracy)
+# Classification report
+print("KNN Classifier Metrics:")
+print(classification_report(y_test, knn_predictions))
+
+print("SVM Classifier Metrics:")
+print(classification_report(y_test, svm_predictions))
+
+# Confusion matrix
+print("KNN Confusion Matrix:")
+print(confusion_matrix(y_test, knn_predictions))
+
+print("SVM Confusion Matrix:")
+print(confusion_matrix(y_test, svm_predictions))
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Calculate confusion matrices
+knn_conf_matrix = confusion_matrix(y_test, knn_predictions)
+svm_conf_matrix = confusion_matrix(y_test, svm_predictions)
+
+# Plot confusion matrices
+plt.figure(figsize=(12, 6))
+
+plt.subplot(1, 2, 1)
+sns.heatmap(knn_conf_matrix, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.title("KNN Confusion Matrix")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.subplot(1, 2, 2)
+sns.heatmap(svm_conf_matrix, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.title("SVM Confusion Matrix")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.tight_layout()
+plt.show()
