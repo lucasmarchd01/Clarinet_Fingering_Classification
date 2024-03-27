@@ -179,7 +179,7 @@ class Mediapipe_BodyModule:
             cv2.destroyAllWindows()
 
             # Save data to CSV after processing all frames
-            self.save_to_csv("hand_landmarks_data.csv")
+            self.save_to_csv("landmark_data_stable/hand_landmarks_data_A#a2.csv")
 
 
 if __name__ == "__main__":
