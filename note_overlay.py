@@ -48,9 +48,9 @@ pose_hand = [
 
 class HandFingerClassifier:
     def __init__(self):
-        self.knn_classifier = load("knn_classifier.joblib")
-        self.svm_classifier = load("svm_classifier.joblib")
-        self.scaler = load("std_scaler.joblib")
+        self.knn_classifier = load("models/knn_classifier.joblib")
+        self.svm_classifier = load("models/svm_classifier.joblib")
+        self.scaler = load("models/std_scaler.joblib")
 
     def predict_fingering(self, hand_landmarks, output_image):
         features = self.extract_features(hand_landmarks, output_image)
@@ -179,9 +179,6 @@ class Mediapipe_BodyModule:
 
             video.release()
             cv2.destroyAllWindows()
-
-            # Save data to CSV after processing all frames
-            self.save_to_csv("landmark_data_stable/hand_landmarks_data_A#a2.csv")
 
 
 if __name__ == "__main__":

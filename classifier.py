@@ -81,6 +81,6 @@ plt.tight_layout()
 plt.show()
 
 
-dump(knn_classifier, "knn_classifier.joblib")
-dump(svm_classifier, "svm_classifier.joblib")
-dump(scaler, "std_scaler.joblib")
+dump(knn_classifier, "models/knn_classifier.joblib")
+dump(svm_classifier, "models/svm_classifier.joblib")
+dump(scaler, "models/std_scaler.joblib")
