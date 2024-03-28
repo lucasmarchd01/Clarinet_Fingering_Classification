@@ -50,12 +50,11 @@ class HandFingerClassifier:
     def __init__(self):
         self.knn_classifier = load("knn_classifier.joblib")
         self.svm_classifier = load("svm_classifier.joblib")
-        self.scaler = StandardScaler()
+        self.scaler = load("std_scaler.joblib")
 
     def predict_fingering(self, hand_landmarks, output_image):
         features = self.extract_features(hand_landmarks, output_image)
-        print(features)
-        if features:
+        if features is not None:
             normalized_features = self.scaler.transform(features)
             knn_prediction = self.knn_classifier.predict(normalized_features)
             svm_prediction = self.svm_classifier.predict(normalized_features)
@@ -77,28 +76,18 @@ class HandFingerClassifier:
             handedness = "Right" if i == 0 else "Left"
             for j, landmark in enumerate(landmarks_list):
                 # Calculate coordinates
-                landmark_name = pose_hand[j]
                 x = landmark.x * output_image.width
                 y = landmark.y * output_image.height
                 z = landmark.z
                 # Store coordinates in dictionary
-                hand_coordinates[handedness][landmark_name] = (x, y, z)
+                hand_coordinates[handedness][j] = (x, y, z)
 
         # Construct feature names and append coordinates
         features = []
-        for landmark_name in pose_hand:
-            for handedness in ["Left", "Right"]:
-                x, y, z = hand_coordinates[handedness][landmark_name]
-                features.extend(
-                    [
-                        f"{landmark_name}_{handedness}_X",
-                        x,
-                        f"{landmark_name}_{handedness}_Y",
-                        y,
-                        f"{landmark_name}_{handedness}_Z",
-                        z,
-                    ]
-                )
+        for handedness in ["Left", "Right"]:
+            for j in range(21):
+                x, y, z = hand_coordinates[handedness][j]
+                features.extend([x, y, z])
         print(np.array([features]).shape)
         return np.array([features])
 

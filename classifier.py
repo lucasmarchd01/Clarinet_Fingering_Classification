@@ -83,3 +83,4 @@ plt.show()
 
 dump(knn_classifier, "knn_classifier.joblib")
 dump(svm_classifier, "svm_classifier.joblib")
+dump(scaler, "std_scaler.joblib")
