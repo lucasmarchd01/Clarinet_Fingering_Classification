@@ -5,10 +5,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, confusion_matrix
 import pandas as pd
+from joblib import dump
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 # Assuming 'data' contains the input data
-df = pd.read_csv("data/combined/flattened_data.csv")
+df = pd.read_csv("data_final.csv")
 
 
 # Extract features and labels
@@ -55,9 +58,6 @@ print(confusion_matrix(y_test, knn_predictions))
 print("SVM Confusion Matrix:")
 print(confusion_matrix(y_test, svm_predictions))
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 # Calculate confusion matrices
 knn_conf_matrix = confusion_matrix(y_test, knn_predictions)
 svm_conf_matrix = confusion_matrix(y_test, svm_predictions)
@@ -79,3 +79,7 @@ plt.ylabel("True Label")
 
 plt.tight_layout()
 plt.show()
+
+
+dump(knn_classifier, "knn_classifier.joblib")
+dump(svm_classifier, "svm_classifier.joblib")
