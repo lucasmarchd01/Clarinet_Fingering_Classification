@@ -14,7 +14,7 @@ HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
 HandLandmarkerResult = mp.tasks.vision.HandLandmarkerResult
 VisionRunningMode = mp.tasks.vision.RunningMode
 
-model_path = "hand_landmarker.task"
+model_path = "models/hand_landmarker.task"
 MARGIN = 10  # pixels
 FONT_SIZE = 1
 FONT_THICKNESS = 1
