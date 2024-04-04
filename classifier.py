@@ -11,7 +11,7 @@ import seaborn as sns
 
 
 # Assuming 'data' contains the input data
-df = pd.read_csv("data_final.csv")
+df = pd.read_csv("data_final_combined.csv")
 
 
 # Extract features and labels
@@ -81,6 +81,6 @@ plt.tight_layout()
 plt.show()
 
 
-dump(knn_classifier, "models/knn_classifier.joblib")
-dump(svm_classifier, "models/svm_classifier.joblib")
-dump(scaler, "models/std_scaler.joblib")
+dump(knn_classifier, "models/knn_classifier_combined.joblib")
+dump(svm_classifier, "models/svm_classifier_combined.joblib")
+dump(scaler, "models/std_scaler_combined.joblib")

@@ -48,9 +48,9 @@ pose_hand = [
 
 class HandFingerClassifier:
     def __init__(self):
-        self.knn_classifier = load("models/knn_classifier.joblib")
-        self.svm_classifier = load("models/svm_classifier.joblib")
-        self.scaler = load("models/std_scaler.joblib")
+        self.knn_classifier = load("models/knn_classifier_unstable.joblib")
+        self.svm_classifier = load("models/svm_classifier_unstable.joblib")
+        self.scaler = load("models/std_scaler_unstable.joblib")
 
     def predict_fingering(self, hand_landmarks, output_image):
         features = self.extract_features(hand_landmarks, output_image)

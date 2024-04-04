@@ -202,24 +202,24 @@ def reorder_columns(data):
 
 
 # Path to the folder containing CSV files
-folder_path = "data/landmark_data"
+folder_path = "data/variable"
 
 # Combine data to one csv file
-combined_data = process_csv_files(folder_path)
-combined_data.to_csv("combined_data_filtered_unstable.csv", index=False)
-print("Combined data saved to 'combined_data_filtered_unstable.csv'")
+data = process_csv_files(folder_path)
+# combined_data.to_csv("combined_data_filtered_unstable.csv", index=False)
+# print("Combined data saved to 'combined_data_filtered_unstable.csv'")
 
 
 # Apply the function to generate unique frame numbers across videos
-data = pd.read_csv("combined_data_filtered_unstable.csv")
+# data = pd.read_csv("combined_data_filtered_unstable.csv")
 data["Unique_Frame"] = generate_unique_frames_across_videos(data["Frame"])
-data.to_csv("combined_data_unique_frames_unstable.csv", index=False)
+# data.to_csv("combined_data_unique_frames_unstable.csv", index=False)
 
 
 # Save to CSV
-data = pd.read_csv("combined_data_unique_frames_unstable.csv")
+# data = pd.read_csv("combined_data_unique_frames_unstable.csv")
 data = flatten_data(data)
-data.to_csv("flattened_data_unstable.csv", index=False)
+# data.to_csv("flattened_data_unstable.csv", index=False)
 
-df = reorder_columns(pd.read_csv("flattened_data_unstable.csv"))
-df.to_csv("data_final_unstable.csv", index=False)
+data = reorder_columns(data)
+data.to_csv("data_final_variable.csv", index=False)
