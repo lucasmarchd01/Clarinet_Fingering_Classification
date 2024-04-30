@@ -4,6 +4,12 @@
 
 This repository contains Python scripts for hand landmark detection using [MediaPipe](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker) and fingering classification using machine learning techniques. The hand landmark detection is performed in real-time using the MediaPipe library, while the fingering classification is based on pre-trained KNN and SVM classifiers.
 
+
+
+https://github.com/lucasmarchd01/Clarinet_Fingering_Classification/assets/71031342/14482b18-5bbc-4365-ac1c-e505b9259162
+
+
+
 ## Contents
 
 - `data_collection_overlay.py:` This script utilizes the MediaPipe Hand Landmarker to overlay hand landmarks on a live camera feed and collect the landmark data in a CSV file.
